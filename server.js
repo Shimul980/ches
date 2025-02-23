@@ -1,5 +1,20 @@
+const express = require('express');
 const WebSocket = require('ws');
-const wss = new WebSocket.Server({ port: 8080 });
+const path = require('path');
+
+const app = express();
+const port = process.env.PORT || 3000;
+
+// Serve static files
+app.use(express.static(path.join(__dirname)));
+
+// Start HTTP server
+const server = app.listen(port, () => {
+    console.log(`Server running at http://localhost:${port}`);
+});
+
+// WebSocket server
+const wss = new WebSocket.Server({ server });
 
 const rooms = new Map();
 const waitingPlayers = new Set();
@@ -81,9 +96,11 @@ function handleLeaveGame(ws) {
     for (const [roomId, room] of rooms.entries()) {
         if (room.white === ws || room.black === ws) {
             const opponent = ws === room.white ? room.black : room.white;
-            opponent.send(JSON.stringify({
-                type: 'opponent_left'
-            }));
+            if (opponent.readyState === WebSocket.OPEN) {
+                opponent.send(JSON.stringify({
+                    type: 'opponent_left'
+                }));
+            }
             rooms.delete(roomId);
             break;
         }

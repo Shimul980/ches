@@ -136,7 +136,7 @@ class ChessGame {
         const destPiece = this.boardState[toRow][toCol];
         if (this.currentTurn === 'white' && Object.keys(this.pieces.white).includes(destPiece)) return false;
         if (this.currentTurn === 'black' && Object.keys(this.pieces.black).includes(destPiece)) return false;
-
+// sadas
         // Get piece type
         const pieceType = this.currentTurn === 'white' ? this.pieces.white[piece] : this.pieces.black[piece];
 

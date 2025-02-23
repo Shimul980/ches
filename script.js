@@ -557,8 +557,7 @@ class ChessGame {
     // Add online mode initialization
     initializeOnlineMode() {
         try {
-            // Connect to Railway server
-            const serverUrl = 'wss://your-chess-app.railway.app';
+            const serverUrl = 'wss://your-app-name.up.railway.app';
             console.log('Connecting to:', serverUrl);
             
             this.ws = new WebSocket(serverUrl);

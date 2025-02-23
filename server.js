@@ -1,16 +1,24 @@
 const express = require('express');
 const WebSocket = require('ws');
 const path = require('path');
+const cors = require('cors');
 
 const app = express();
-const port = process.env.PORT || 3000;
+app.use(cors());
+
+// Keep Glitch from sleeping
+const keepAlive = () => {
+  setInterval(() => {
+    console.log('Keeping server alive...');
+  }, 280000); // Every 4.6 minutes
+};
+keepAlive();
 
 // Serve static files
 app.use(express.static(path.join(__dirname)));
 
-// Start HTTP server
-const server = app.listen(port, () => {
-    console.log(`Server running at http://localhost:${port}`);
+const server = app.listen(process.env.PORT || 3000, () => {
+    console.log('Server is running on port', process.env.PORT || 3000);
 });
 
 // WebSocket server

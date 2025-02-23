@@ -557,15 +557,11 @@ class ChessGame {
     // Add online mode initialization
     initializeOnlineMode() {
         try {
-            // Get the server URL from window location
-            const host = window.location.hostname;
-            const port = 3000; // Make sure this matches your server port
-            const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-            const wsUrl = `${wsProtocol}//${host}:${port}`;
+            // Connect to Railway server
+            const serverUrl = 'wss://your-chess-app.railway.app';
+            console.log('Connecting to:', serverUrl);
             
-            console.log('Connecting to WebSocket server at:', wsUrl);
-            
-            this.ws = new WebSocket(wsUrl);
+            this.ws = new WebSocket(serverUrl);
             
             this.ws.onopen = () => {
                 console.log('Connected to server');
@@ -611,8 +607,8 @@ class ChessGame {
                 }
             };
         } catch (error) {
-            console.error('Failed to initialize WebSocket:', error);
-            this.showGameOver('Failed to connect to server. Please try again.');
+            console.error('WebSocket error:', error);
+            this.showGameOver('Connection error. Please try again.');
         }
     }
 

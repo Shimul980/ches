@@ -73,7 +73,12 @@ class ChessGame {
                 
                 square.dataset.row = row;
                 square.dataset.col = col;
-                square.textContent = this.boardState[row][col];
+                
+                // Create span for piece
+                const piece = document.createElement('span');
+                piece.textContent = this.boardState[row][col];
+                square.appendChild(piece);
+                
                 this.board.appendChild(square);
             }
         }

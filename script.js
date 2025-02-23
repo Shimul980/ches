@@ -546,13 +546,21 @@ class ChessGame {
 
     // Add online mode initialization
     initializeOnlineMode() {
-        this.ws = new WebSocket('ws://localhost:8080');
+        // Use relative WebSocket URL to match current protocol and host
+        const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+        const wsUrl = `${wsProtocol}//${window.location.host}`;
+        this.ws = new WebSocket(wsUrl);
         
         this.ws.onopen = () => {
             console.log('Connected to server');
             this.ws.send(JSON.stringify({
                 type: 'find_game'
             }));
+        };
+
+        this.ws.onerror = (error) => {
+            console.error('WebSocket error:', error);
+            this.showGameOver('Connection error. Please try again.');
         };
 
         this.ws.onmessage = (event) => {

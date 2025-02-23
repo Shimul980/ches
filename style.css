@@ -306,4 +306,119 @@
 
 #changeModeBtn:hover {
     background-color: #1976D2;
+}
+
+/* Add these responsive styles */
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+
+    .game-container {
+        padding: 15px;
+    }
+
+    .board {
+        width: 100%;
+        height: auto;
+        aspect-ratio: 1;
+        max-width: 400px;
+    }
+
+    .square {
+        width: auto;
+        height: auto;
+        font-size: 30px;
+    }
+
+    .mode-buttons {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .mode-btn {
+        width: 100%;
+        max-width: 300px;
+    }
+
+    .player-info {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+
+    .controls {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .controls button {
+        width: 100%;
+    }
+
+    .turn {
+        font-size: 18px;
+    }
+}
+
+/* Add these styles for better touch interaction */
+@media (hover: none) {
+    .square {
+        cursor: default;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .mode-btn:active {
+        transform: scale(0.98);
+    }
+}
+
+/* Add landscape mode optimization */
+@media (max-width: 768px) and (orientation: landscape) {
+    .container {
+        flex-direction: row;
+        gap: 20px;
+    }
+
+    .game-container {
+        flex-direction: row;
+        gap: 20px;
+    }
+
+    .board {
+        max-width: 60vh;
+    }
+
+    .game-info {
+        min-width: 200px;
+    }
+}
+
+/* Add these base styles to ensure proper scaling */
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    overflow-x: hidden;
+}
+
+.board {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    grid-template-rows: repeat(8, 1fr);
+    gap: 0;
+}
+
+.square {
+    position: relative;
+    width: 100%;
+    padding-bottom: 100%;
+}
+
+.square > * {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 } 

@@ -421,4 +421,19 @@ html, body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+}
+
+.exit-btn {
+    background-color: #dc3545;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.exit-btn:hover {
+    background-color: #c82333;
 } 

@@ -44,6 +44,11 @@ class ChessGame {
         // Initialize based on game mode
         this.initializeGameMode();
         this.addVictoryStyles();
+
+        // Add exit button handler
+        document.getElementById('exitBtn').addEventListener('click', () => {
+            this.exitGame();
+        });
     }
 
     initializeBoard() {
@@ -546,52 +551,64 @@ class ChessGame {
 
     // Add online mode initialization
     initializeOnlineMode() {
-        // Use relative WebSocket URL to match current protocol and host
-        const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-        const wsUrl = `${wsProtocol}//${window.location.host}`;
-        this.ws = new WebSocket(wsUrl);
-        
-        this.ws.onopen = () => {
-            console.log('Connected to server');
-            this.ws.send(JSON.stringify({
-                type: 'find_game'
-            }));
-        };
-
-        this.ws.onerror = (error) => {
-            console.error('WebSocket error:', error);
-            this.showGameOver('Connection error. Please try again.');
-        };
-
-        this.ws.onmessage = (event) => {
-            const data = JSON.parse(event.data);
+        try {
+            // Get the server URL from window location
+            const host = window.location.hostname;
+            const port = 3000; // Make sure this matches your server port
+            const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const wsUrl = `${wsProtocol}//${host}:${port}`;
             
-            switch(data.type) {
-                case 'waiting':
-                    document.getElementById('player2').textContent = 'Waiting for opponent...';
-                    break;
-                    
-                case 'game_start':
-                    this.onlineColor = data.color;
-                    this.roomId = data.roomId;
-                    document.getElementById('player2').textContent = 
-                        `Opponent (${this.onlineColor === 'white' ? 'Black' : 'White'})`;
-                    break;
-                    
-                case 'opponent_move':
-                    this.handleOnlineMove(data.move);
-                    break;
-                    
-                case 'opponent_left':
-                    this.showGameOver('Opponent left the game');
-                    break;
-            }
-        };
+            console.log('Connecting to WebSocket server at:', wsUrl);
+            
+            this.ws = new WebSocket(wsUrl);
+            
+            this.ws.onopen = () => {
+                console.log('Connected to server');
+                this.ws.send(JSON.stringify({
+                    type: 'find_game'
+                }));
+            };
 
-        this.ws.onclose = () => {
-            console.log('Disconnected from server');
-            this.showGameOver('Connection lost');
-        };
+            this.ws.onerror = (error) => {
+                console.error('WebSocket error:', error);
+                this.showGameOver('Connection error. Please try again.');
+            };
+
+            this.ws.onclose = (event) => {
+                console.log('WebSocket closed:', event);
+                if (!event.wasClean) {
+                    this.showGameOver('Connection lost. Please check your internet connection.');
+                }
+            };
+
+            this.ws.onmessage = (event) => {
+                const data = JSON.parse(event.data);
+                
+                switch(data.type) {
+                    case 'waiting':
+                        document.getElementById('player2').textContent = 'Waiting for opponent...';
+                        break;
+                        
+                    case 'game_start':
+                        this.onlineColor = data.color;
+                        this.roomId = data.roomId;
+                        document.getElementById('player2').textContent = 
+                            `Opponent (${this.onlineColor === 'white' ? 'Black' : 'White'})`;
+                        break;
+                        
+                    case 'opponent_move':
+                        this.handleOnlineMove(data.move);
+                        break;
+                        
+                    case 'opponent_left':
+                        this.showGameOver('Opponent left the game');
+                        break;
+                }
+            };
+        } catch (error) {
+            console.error('Failed to initialize WebSocket:', error);
+            this.showGameOver('Failed to connect to server. Please try again.');
+        }
     }
 
     handleOnlineMove(move) {
@@ -625,6 +642,20 @@ class ChessGame {
             }
         `;
         document.head.appendChild(style);
+    }
+
+    exitGame() {
+        // Close WebSocket connection if in online mode
+        if (this.gameMode === 'online' && this.ws) {
+            this.ws.close();
+        }
+        
+        // Show game mode selector
+        document.querySelector('.container').style.display = 'none';
+        document.getElementById('gameModeSelector').style.display = 'flex';
+        
+        // Reset game state
+        this.resetGame();
     }
 }
 

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chess Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Game Mode Selector -->
+    <div id="gameModeSelector" class="mode-selector">
+        <h1>Select Game Mode</h1>
+        <div class="mode-buttons">
+            <button id="offlineMode" class="mode-btn">
+                <h2>Offline 2 Player</h2>
+                <p>Play with a friend on the same device</p>
+            </button>
+            <button id="botMode" class="mode-btn">
+                <h2>Play with Bot</h2>
+                <p>Challenge our AI opponent</p>
+            </button>
+            <button id="onlineMode" class="mode-btn">
+                <h2>Online Mode</h2>
+                <p>Play with players worldwide</p>
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Game Container (Initially Hidden) -->
+    <div class="container white-turn" style="display: none;">
+        <div class="game-container">
+            <div class="game-header">
+                <div class="player-info">
+                    <span id="player1">Player 1 (White)</span>
+                    <span id="player2">Player 2 (Black)</span>
+                </div>
+            </div>
+            <div class="board" id="chessBoard"></div>
+            <div class="game-info">
+                <div class="turn">Turn: <span id="currentTurn">White</span></div>
+                <div class="controls">
+                    <button id="undoBtn">← Undo</button>
+                    <button id="resetBtn">Reset Game</button>
+                    <button id="redoBtn">Redo →</button>
+                </div>
+            </div>
+        </div>
+        <div id="gameOverModal" class="modal">
+            <div class="modal-content">
+                <h2>Game Over!</h2>
+                <p id="gameOverMessage"></p>
+                <button id="newGameBtn">New Game</button>
+                <button id="changeModeBtn">Change Mode</button>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
